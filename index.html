@@ -82,6 +82,16 @@
 
 
   <script>
+    function hash(str) {
+      var hashed = 0;
+      for (let i = 0; i < str.length; i++) {
+        hashed = ((hashed << 5) - hashed) + str.charCodeAt(i);
+        hashed = hashed & hashed; // Constrains the hash as a signed 32-bits int
+      }
+
+      return hashed;
+    }
+
     function checkFemboy() {
       const name = document.getElementById("nameInput").value.trim();
       const resultText = document.getElementById("resultText");
@@ -104,7 +114,8 @@
       progressContainer.style.display = "block";
       resultImage.style.display = "none";
 
-      const percent = Math.floor(Math.random() * 101);
+      const hashed = hash(hash(name.toLowerCase()).toString());
+      const percent = (hashed < 0 ? -hashed : hashed) % 101;
       let current = 0;
 
       const interval = setInterval(() => {
